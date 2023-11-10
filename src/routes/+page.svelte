@@ -61,6 +61,22 @@
 
 	function upload(event) {
 		// upload to web service that processes image, gets results back
+		const imageData = canvas.toDataURL('image/png');
+
+		try {
+			const response = await fetch('https://us-west1-ingredient-scan.cloudfunctions.net/python-http-function', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ image: imageData }),
+			});
+
+			const result = await response.json();
+			console.log(result); // Handle the response from the server
+		} catch (error) {
+			console.error('Error:', error);
+		}
 	}
 </script>
 
@@ -94,9 +110,7 @@
 			Upload
 		</button>
 
-		<div id="results">
-			Ingredient info goes here
-		</div>
+		<div id="results">Ingredient info goes here</div>
 	</div>
 </div>
 
