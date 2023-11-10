@@ -59,7 +59,7 @@
 		}
 	}
 
-	function upload(event) {
+	async function upload(event) {
 		// upload to web service that processes image, gets results back
 		const imageData = canvas.toDataURL('image/png');
 
