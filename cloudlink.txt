@@ -1,0 +1,1 @@
+https://us-west1-ingredient-scan.cloudfunctions.net/python-http-function
