@@ -68,7 +68,7 @@
 		const imageData = canvas.toDataURL('image/png');
 
 		try {
-			const response = await fetch('https://us-west1-ingredient-scan.cloudfunctions.net/python-http-function', {
+			const response = await fetch('/api', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -101,9 +101,9 @@
 			</button>
 		</div>
 		<canvas bind:this={canvas} />
-		<!-- 		<div class="output">
+				<div class="output">
 			<img bind:this={photo} id="photo" alt="The screen capture will appear in this box." />
-		</div> -->
+		</div>
 		<button
 			on:click={upload}
 			class="btn variant-filled"

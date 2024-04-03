@@ -1,34 +1,27 @@
-import { json } from '@sveltejs/kit'
+import { json } from '@sveltejs/kit';
 
-// /api/newsletter GET
+export async function POST({ request }) {
+  // Parse the request body to get the image data
+  const { image: imageData } = await request.json();
 
-export async function GET(event) {
-  const options: ResponseInit = {
-    status: 418,
-    headers: {
-      X: 'Gon give it to ya',
-    }
+  try {
+    // Forward the image data to the external API endpoint
+    const externalApiResponse = await fetch('https://us-west1-ingredient-scan.cloudfunctions.net/python-http-function', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ image: imageData }),
+    });
+
+    // Wait for the response from the external API
+    const result = await externalApiResponse.json();
+
+    // Return the result from the external API back to the client
+    return json({ success: true, result });
+  } catch (error) {
+    console.error('Error forwarding request to external API:', error);
+    // Handle any errors that occur during the fetch request
+    return json({ success: false, error: 'Failed to forward request to external API' }, { status: 500 });
   }
-
-  return new Response('Hello', options)
-}
-
-// /api/newsletter POST
-
-export async function POST(event) {
-  const data = await event.request.formData()
-  const email = data.get('email')
-
-  // subscribe the user to the newsletter
-  console.log(email)
-
-  // return success
-  return new Response(JSON.stringify({ success: true }), {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-
-  // it's common to return JSON, so SvelteKit has a helper
-  return json({ success: true })
 }
